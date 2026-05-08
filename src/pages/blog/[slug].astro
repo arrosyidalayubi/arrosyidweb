@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
+import RelatedPosts from '../../components/blog/RelatedPost.astro';
+import Comment from '../../components/blog/Comment.astro';
+
+// Mengenerate semua route berdasarkan file MDX
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  return blogEntries.map(entry => ({
+    params: { slug: entry.slug }, props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<BlogPostLayout frontmatter={entry.data}>
+  <!-- Konten Utama Tulisan -->
+  <article class="prose max-w-3xl mx-auto">
+    <Content />
+  </article>
+
+  <!-- Saran Artikel Serupa -->
+  <RelatedPosts currentTags={entry.data.tags} currentSlug={entry.slug} />
+
+  <!-- Fitur Komentar (Giscus/Cusdis) -->
+  <Comment />
+</BlogPostLayout>
