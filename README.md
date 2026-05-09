@@ -1,6 +1,6 @@
 # 🚀 Arrosyid Personal Web & Portfolio
 
-Website portofolio, blog, dan vlog pribadi yang dibangun dengan fokus pada performa maksimal (Lighthouse 100/100), Aksesibilitas (A11y), dan *User Experience* (UX) kelas atas. 
+Website portofolio, blog, dan vlog pribadi yang dibangun dengan fokus pada performa maksimal (Lighthouse 100/100), Aksesibilitas (A11y), dan *User Experience* (UX) kelas atas.
 
 🌐 **Live Demo:** [arrosyid.my.id](https://arrosyid.my.id)
 
@@ -15,7 +15,7 @@ Website portofolio, blog, dan vlog pribadi yang dibangun dengan fokus pada perfo
 - **Penulisan MDX:** Mendukung penulisan konten menggunakan Markdown standar dengan keleluasaan menyisipkan komponen UI (seperti `MosaicGallery`) di tengah artikel.
 - **Optimasi Gambar Otomatis:** Integrasi penuh dengan `astro:assets` untuk kompresi gambar ke WebP/AVIF, *lazy-loading*, dan pencegahan *Layout Shift*.
 - **Lightbox / Image Pop-up:** Menggunakan `medium-zoom` untuk interaksi galeri dan gambar artikel layar penuh yang mulus.
-- **Smart UI / UX:** 
+- **Smart UI / UX:**
   - *Dark/Light Mode Toggle* (tersimpan di *local storage* dan mengikuti preferensi sistem).
   - *Smart Header* (otomatis sembunyi saat *scroll* ke bawah untuk membaca, muncul saat *scroll* ke atas).
   - *Table of Contents* (Daftar Isi) dinamis dengan pemantau `IntersectionObserver` untuk menyorot bagian yang sedang dibaca.
