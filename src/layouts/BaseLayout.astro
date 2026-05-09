@@ -1,25 +1,16 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import '../assets/styles/global.css';
 
-interface Props {
-  title: string;
-  description: string;
-}
-
-const { title, description } = Astro.props;
 ---
-
 <!doctype html>
 <html lang="id">
-  <head>
+  </head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <title>{title} | Arrosyid Al Ayubi</title>
-    
-    <!-- Transisi mulus antar halaman -->
-    <ViewTransitions />
+    <meta name="description" content="Arrosyid Al Ayubi adalah seorang developer yang berfokus pada pembuatan website yang responsif dan user-friendly." />
+    <title>Website Personal | Arrosyid Al Ayubi</title>
+     <ClientRouter />
   </head>
   <body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-200">
     <!-- Nanti kita tambahkan Header/Navigasi di sini -->
