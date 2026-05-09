@@ -1,0 +1,46 @@
+---
+// src/layouts/BlogPostLayout.astro
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+    publishDate: Date;
+    tags?: string[];
+  };
+}
+
+const { frontmatter } = Astro.props;
+---
+
+<BaseLayout title={frontmatter.title} description={frontmatter.description}>
+  <article class="max-w-3xl mx-auto px-4 py-16 md:py-24">
+    <!-- Header Artikel -->
+    <header class="mb-12 text-center">
+      <time datetime={frontmatter.publishDate.toISOString()} class="text-sm font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-4 block">
+        {new Date(frontmatter.publishDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+      </time>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight mb-6">
+        {frontmatter.title}
+      </h1>
+      {frontmatter.tags && (
+        <div class="flex flex-wrap justify-center gap-2">
+          {frontmatter.tags.map((tag) => (
+            <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-medium rounded-full">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <!-- Konten MDX (Prose) -->
+    <!-- Class 'prose' akan merapikan semua tag HTML bawaan markdown -->
+    <!-- Elemen dengan class 'breakout' akan tetap bisa keluar dari batas max-w-3xl -->
+    <div class="prose prose-lg prose-slate dark:prose-invert md:prose-xl mx-auto
+                prose-img:rounded-2xl prose-img:shadow-lg prose-a:text-blue-600 dark:prose-a:text-blue-400">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>

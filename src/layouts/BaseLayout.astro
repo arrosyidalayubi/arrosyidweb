@@ -1,22 +1,60 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import '../assets/styles/global.css';
+import Header from '../components/shared/Header.astro'; // Kita akan buat ini
 
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
 ---
+
 <!doctype html>
 <html lang="id">
-  </head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Arrosyid Al Ayubi adalah seorang developer yang berfokus pada pembuatan website yang responsif dan user-friendly." />
-    <title>Website Personal | Arrosyid Al Ayubi</title>
-     <ClientRouter />
+    <meta name="description" content={description} />
+    <title>{title} | Arrosyid Al Ayubi</title>
+    <ClientRouter />
+
+    <!-- Script Inline untuk Dark Mode Init & View Transitions -->
+    <script is:inline>
+      // 1. Bungkus logika pengecekan tema ke dalam sebuah fungsi
+      const applyTheme = () => {
+        const theme = (() => {
+          if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+            return localStorage.getItem('theme');
+          }
+          if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+          }
+          return 'light';
+        })();
+        
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        window.localStorage.setItem('theme', theme);
+      };
+
+      // 2. Jalankan fungsi saat halaman pertama kali dimuat (mencegah FOUC)
+      applyTheme();
+
+      // 3. KUNCI PERBAIKAN: Jalankan ulang fungsi tepat setelah Astro menukar halaman
+      document.addEventListener('astro:after-swap', applyTheme);
+    </script>
   </head>
-  <body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-200">
-    <!-- Nanti kita tambahkan Header/Navigasi di sini -->
+  
+  <!-- Tambahkan dark:bg-slate-900 dan dark:text-slate-100 -->
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-blue-200 dark:selection:bg-blue-900 transition-colors duration-300">
+    <Header />
     <main>
       <slot />
     </main>
-    <!-- Nanti kita tambahkan Footer di sini -->
   </body>
 </html>

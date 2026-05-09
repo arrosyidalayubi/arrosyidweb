@@ -19,7 +19,7 @@ const vlogCollection = defineCollection({
     title: z.string(),
     location: z.string(),
     publishDate: z.date(),
-    gallery: z.array(z.string()), // Array URL gambar untuk Mosaic Gallery
+    gallery: z.array(z.string()).optional(),
   }),
 });
 

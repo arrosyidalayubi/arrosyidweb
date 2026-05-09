@@ -1,23 +1,53 @@
 ---
-// 1. Tambahkan 'render' pada import dari astro:content
+// src/pages/blog/[slug].astro
 import { getCollection, render } from 'astro:content';
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
+import Comment from '../../components/shared/Comment.astro';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog');
-  
   return blogEntries.map(entry => ({
-    // 2. Ubah entry.slug menjadi entry.id
     params: { slug: entry.id },
     props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-
-// 3. Ubah await entry.render() menjadi await render(entry)
 const { Content } = await render(entry);
+
+// --- Logika Related Posts ---
+const allBlogs = await getCollection('blog');
+const currentTags = entry.data.tags || [];
+
+// Cari artikel lain (kecuali yang sedang dibaca) yang memiliki tag yang sama
+const relatedPosts = allBlogs
+  .filter(post => post.id !== entry.id) // Jangan tampilkan artikel ini sendiri
+  .map(post => {
+    // Hitung berapa banyak tag yang sama
+    const matchingTags = (post.data.tags || []).filter(tag => currentTags.includes(tag));
+    return { ...post, matchCount: matchingTags.length };
+  })
+  .filter(post => post.matchCount > 0) // Hanya ambil yang punya tag sama
+  .sort((a, b) => b.matchCount - a.matchCount) // Urutkan dari yang paling mirip
+  .slice(0, 2); // Ambil 2 teratas
 ---
 
-<!-- Struktur HTML Anda di bawah sini -->
-<h1>{entry.data.title}</h1>
-<Content />
+<BlogPostLayout frontmatter={entry.data}>
+  <Content />
+
+  <!-- Bagian Artikel Terkait -->
+  {relatedPosts.length > 0 && (
+    <div class="mt-20 pt-10 border-t border-slate-200 dark:border-slate-800 not-prose">
+      <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Baca Juga</h3>
+      <div class="grid sm:grid-cols-2 gap-6">
+        {relatedPosts.map(post => (
+          <a href={`/blog/${post.id}`} class="block p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+            <h4 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">{post.data.title}</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">{post.data.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+  <Comment />
+</BlogPostLayout>

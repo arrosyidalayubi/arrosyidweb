@@ -1,0 +1,64 @@
+---
+// src/components/blog/Comment.astro
+---
+
+<div class="mt-16 pt-10 border-t border-slate-200 dark:border-slate-800 not-prose">
+  <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Komentar</h3>
+  <div id="giscus-container"></div>
+</div>
+
+<script>
+  // Fungsi untuk memuat Giscus secara dinamis
+  function loadGiscus() {
+    const container = document.getElementById('giscus-container');
+    if (!container) return;
+
+    // Bersihkan kontainer jika sudah ada komentar sebelumnya (saat pindah halaman)
+    container.innerHTML = '';
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    
+    // UBAH BAGIAN INI DENGAN DATA DARI GISCUS.APP MILIKMU
+    script.setAttribute('data-repo', 'arrosyidalayubi/arrosyidweb'); 
+    script.setAttribute('data-repo-id', 'R_kgDOSYRlzw');
+    script.setAttribute('data-category', 'Announcements'); 
+    script.setAttribute('data-category-id', 'DIC_kwDOSYRlz84C8oUy');
+    
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'bottom');
+    script.setAttribute('data-lang', 'id');
+    script.setAttribute('crossorigin', 'anonymous');
+    script.async = true;
+
+    // Sinkronisasi otomatis dengan Dark Mode website
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    script.setAttribute('data-theme', isDarkMode ? 'transparent_dark' : 'light');
+
+    container.appendChild(script);
+  }
+
+  // Muat Giscus saat halaman pertama kali dibuka atau saat pindah halaman
+  document.addEventListener('astro:page-load', loadGiscus);
+
+  // Dengarkan perubahan tombol Dark Mode agar tema komentar ikut berubah secara real-time
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        const isDarkMode = document.documentElement.classList.contains('dark');
+        const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage(
+            { giscus: { setConfig: { theme: isDarkMode ? 'transparent_dark' : 'light' } } },
+            'https://giscus.app'
+          );
+        }
+      }
+    });
+  });
+
+  observer.observe(document.documentElement, { attributes: true });
+</script>

@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// 1. Ambil data dari collection 'vlog'
+const allVlogs = await getCollection('vlog');
+
+// 2. Urutkan dari tanggal terbaru ke terlama
+const sortedVlogs = allVlogs.sort((a, b) => {
+  return new Date(b.data.publishDate).valueOf() - new Date(a.data.publishDate).valueOf();
+});
+---
+
+<BaseLayout title="Galeri & Vlog" description="Catatan perjalanan, eksplorasi visual, dan dokumentasi momen.">
+  <div class="max-w-6xl mx-auto px-4 py-16 md:py-24">
+    
+    <!-- Header Halaman -->
+    <header class="mb-16 text-center">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6">
+        Catatan Perjalanan
+      </h1>
+      <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+        Eksplorasi visual, dokumentasi tempat-tempat menarik, dan cerita di balik setiap perjalanan yang saya abadikan.
+      </p>
+    </header>
+
+    <!-- Grid Galeri Vlog -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      {sortedVlogs.map((vlog) => (
+        <a href={`/vlog/${vlog.id}`} class="group relative block h-80 rounded-3xl overflow-hidden bg-slate-200 dark:bg-slate-800 shadow-sm hover:shadow-2xl transition-all duration-300">
+          
+          <!-- Gambar Cover (Mengambil gambar pertama dari array gallery) -->
+          {vlog.data.gallery && vlog.data.gallery.length > 0 ? (
+            <img 
+              src={vlog.data.gallery[0]} 
+              alt={`Cover untuk ${vlog.data.title}`} 
+              class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out" 
+              loading="lazy"
+            />
+          ) : (
+            <div class="absolute inset-0 flex items-center justify-center text-slate-400 dark:text-slate-500 font-medium">
+              Tanpa Gambar
+            </div>
+          )}
+
+          <!-- Overlay Gradient Gelap agar teks selalu terbaca -->
+          <div class="absolute inset-0 bg-linear-to-t from-slate-900/95 via-slate-900/40 to-transparent"></div>
+
+          <!-- Konten Teks di Atas Gambar -->
+          <div class="absolute bottom-0 left-0 p-6 w-full text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+            <!-- Label Lokasi -->
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-3 py-1.5 bg-blue-600/80 backdrop-blur-md text-xs font-bold rounded-lg uppercase tracking-wider shadow-sm">
+                <svg class="w-3.5 h-3.5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                {vlog.data.location}
+              </span>
+            </div>
+            
+            <!-- Judul Vlog -->
+            <h2 class="text-2xl font-bold mb-2 group-hover:text-blue-300 transition-colors line-clamp-2 leading-snug">
+              {vlog.data.title}
+            </h2>
+            
+            <!-- Tanggal Publikasi -->
+            <time class="text-sm text-slate-300 font-medium opacity-80">
+              {new Date(vlog.data.publishDate).toLocaleDateString('id-ID', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </time>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</BaseLayout>
