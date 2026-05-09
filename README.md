@@ -1,46 +1,48 @@
-# Astro Starter Kit: Basics
+# 🚀 Arrosyid Personal Web & Portfolio
 
-```sh
-npm create astro@latest -- --template basics
-```
+Website portofolio, blog, dan vlog pribadi yang dibangun dengan fokus pada performa maksimal (Lighthouse 100/100), Aksesibilitas (A11y), dan *User Experience* (UX) kelas atas. 
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+🌐 **Live Demo:** [arrosyid.my.id](https://arrosyid.my.id)
 
-## 🚀 Project Structure
+![Astro](https://img.shields.io/badge/Astro-FF5D01?style=for-the-badge&logo=astro&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![MDX](https://img.shields.io/badge/MDX-1B1F24?style=for-the-badge&logo=mdx&logoColor=white)
 
-Inside of your Astro project, you'll see the following folders and files:
+## ✨ Fitur Utama
+
+- **Arsitektur Content Collections:** Menggunakan Astro `content.config.ts` dan sinkronisasi Zod untuk validasi tipe data (Blog, Vlog, Proyek) yang ketat (Type-Safe).
+- **Penulisan MDX:** Mendukung penulisan konten menggunakan Markdown standar dengan keleluasaan menyisipkan komponen UI (seperti `MosaicGallery`) di tengah artikel.
+- **Optimasi Gambar Otomatis:** Integrasi penuh dengan `astro:assets` untuk kompresi gambar ke WebP/AVIF, *lazy-loading*, dan pencegahan *Layout Shift*.
+- **Lightbox / Image Pop-up:** Menggunakan `medium-zoom` untuk interaksi galeri dan gambar artikel layar penuh yang mulus.
+- **Smart UI / UX:** 
+  - *Dark/Light Mode Toggle* (tersimpan di *local storage* dan mengikuti preferensi sistem).
+  - *Smart Header* (otomatis sembunyi saat *scroll* ke bawah untuk membaca, muncul saat *scroll* ke atas).
+  - *Table of Contents* (Daftar Isi) dinamis dengan pemantau `IntersectionObserver` untuk menyorot bagian yang sedang dibaca.
+- **Technical SEO & A11y:** Generasi sitemap otomatis, meta tag Open Graph & Twitter Cards dinamis, *semantic HTML*, dan *Skip to Content link* untuk navigasi *keyboard*.
+- **View Transitions:** Transisi perpindahan antar halaman yang sangat mulus layaknya *Single Page Application* (SPA).
+
+## 🛠️ Tech Stack
+
+- **Framework:** [Astro.js](https://astro.build/) (SSG Mode)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/) + `@tailwindcss/typography`
+- **Interaktivitas:** Vanilla JavaScript (Zero-bloatware)
+- **Deployment:** Dioptimalkan untuk [Cloudflare Pages](https://pages.cloudflare.com/) (bebas *vendor lock-in*).
+
+## 📂 Struktur Direktori Utama
 
 ```text
 /
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+├── public/                 # Aset statis publik (favicon, default-og.webp, font)
+├── src/
+│   ├── assets/             # Aset gambar lokal (dioptimasi oleh Astro)
+│   ├── components/         # Komponen UI modular (Header, Footer, Gallery, Share)
+│   ├── content/            # Sumber kebenaran data (MDX)
+│   │   ├── blog/           # Artikel blog
+│   │   ├── proyek/         # Studi kasus proyek portfolio
+│   │   └── vlog/           # Galeri perjalanan & vlog
+│   ├── layouts/            # Template layout halaman dasar
+│   ├── pages/              # Routing berbasis file Astro
+│   └── content.config.ts   # Skema Zod untuk validasi konten
+├── astro.config.mjs        # Konfigurasi integrasi Astro (Tailwind, Sitemap, dll)
+└── tailwind.config.mjs     # Konfigurasi kustomisasi tema Tailwind
