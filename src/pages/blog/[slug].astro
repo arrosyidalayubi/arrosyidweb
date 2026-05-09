@@ -1,30 +1,23 @@
 ---
-import { getCollection } from 'astro:content';
-import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
-import RelatedPosts from '../../components/blog/RelatedPost.astro';
-import Comment from '../../components/blog/Comment.astro';
+// 1. Tambahkan 'render' pada import dari astro:content
+import { getCollection, render } from 'astro:content';
 
-// Mengenerate semua route berdasarkan file MDX
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog');
+  
   return blogEntries.map(entry => ({
-    params: { slug: entry.slug }, props: { entry },
+    // 2. Ubah entry.slug menjadi entry.id
+    params: { slug: entry.id },
+    props: { entry },
   }));
 }
 
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+
+// 3. Ubah await entry.render() menjadi await render(entry)
+const { Content } = await render(entry);
 ---
 
-<BlogPostLayout frontmatter={entry.data}>
-  <!-- Konten Utama Tulisan -->
-  <article class="prose max-w-3xl mx-auto">
-    <Content />
-  </article>
-
-  <!-- Saran Artikel Serupa -->
-  <RelatedPosts currentTags={entry.data.tags} currentSlug={entry.slug} />
-
-  <!-- Fitur Komentar (Giscus/Cusdis) -->
-  <Comment />
-</BlogPostLayout>
+<!-- Struktur HTML Anda di bawah sini -->
+<h1>{entry.data.title}</h1>
+<Content />

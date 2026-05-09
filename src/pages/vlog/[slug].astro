@@ -1,0 +1,23 @@
+---
+// 1. Tambahkan 'render' pada import dari astro:content
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const vlogEntries = await getCollection('vlog');
+  
+  return vlogEntries.map(entry => ({
+    // 2. Ubah entry.slug menjadi entry.id
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+
+// 3. Ubah await entry.render() menjadi await render(entry)
+const { Content } = await render(entry);
+---
+
+<!-- Struktur HTML Anda di bawah sini -->
+<h1>{entry.data.title}</h1>
+<Content />
