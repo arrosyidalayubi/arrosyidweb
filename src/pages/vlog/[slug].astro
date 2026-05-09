@@ -1,9 +1,7 @@
 ---
-// src/pages/vlog/[slug].astro
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Comment from '../../components/shared/Comment.astro';
-// 1. Import komponen MosaicGallery yang sudah kita buat
 import MosaicGallery from '../../components/media/MosaicGallery.astro';
 
 export async function getStaticPaths() {

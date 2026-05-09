@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
 
 export async function getStaticPaths() {
   const projects = await getCollection('proyek');
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const { title, description, client, role, techStack, liveUrl, githubUrl } = entry.data;
+const { title, description, client, role, techStack, liveUrl, githubUrl, coverImage } = entry.data;
 ---
 
 <BaseLayout title={`Proyek: ${title}`} description={description}>
@@ -48,6 +49,19 @@ const { title, description, client, role, techStack, liveUrl, githubUrl } = entr
         </div>
       )}
     </header>
+
+    {coverImage && (
+      <div class="mb-12 md:mb-16 rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800">
+        <Image 
+          src={coverImage} 
+          alt={`Preview proyek ${title}`} 
+          class="w-full h-auto max-h-125 object-cover hover:scale-105 transition-transform duration-700 ease-out"
+          width={1200}
+          height={600}
+          loading="eager" 
+        />
+      </div>
+    )}
 
     <div class="prose prose-lg prose-slate dark:prose-invert mx-auto prose-img:rounded-2xl">
       <Content />

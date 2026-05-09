@@ -1,5 +1,5 @@
 ---
-// src/components/shared/Header.astro
+import { Image } from 'astro:assets';
 const navItems = [
   { label: 'Beranda', href: '/' },
   { label: 'Proyek', href: '/#proyek' },
@@ -8,12 +8,20 @@ const navItems = [
 ];
 ---
 
-<header class="sticky top-0 z-50 w-full backdrop-blur-md bg-white/70 dark:bg-slate-950/70 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+<header id="main-header" class="sticky top-0 z-40 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-transform duration-300">
   <div class="max-w-5xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
     
     <!-- Logo -->
     <a href="/" class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-      arrosyid<span class="text-blue-600 dark:text-blue-400">.</span>
+      <Image 
+              src= "/Logo.svg"
+              alt="Logo Arrosyid Al Ayubi"
+              class="inline w-6 h-6 mr-2 -mt-1" 
+              width={150}
+              height={150}
+              aria-label="logo"
+              loading="eager"
+            />
     </a>
 
     <!-- Desktop Nav -->
@@ -25,7 +33,7 @@ const navItems = [
       </ul>
       
       <!-- Dark Mode Toggle Button -->
-      <button id="theme-toggle" aria-label="Toggle Dark Mode" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+      <button id="theme-toggle" aria-label="Ganti tema gelap atau terang" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
         <!-- Sun Icon (Tampil saat Dark Mode) -->
         <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
         <!-- Moon Icon (Tampil saat Light Mode) -->
@@ -35,10 +43,10 @@ const navItems = [
 
     <!-- Mobile Menu Button -->
     <div class="md:hidden flex items-center gap-4">
-      <button id="mobile-theme-toggle" class="p-2 text-slate-600 dark:text-slate-300">
+      <button id="mobile-theme-toggle" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="mobile-menu" class="p-2 text-slate-600 dark:text-slate-300">
          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
       </button>
-      <button id="mobile-menu-toggle" class="p-2 text-slate-600 dark:text-slate-300 focus:outline-none">
+      <button id="mobile-menu-toggle" aria-label="Tutup menu navigasi" aria-expanded="false" aria-controls="mobile-menu" class="p-2 text-slate-600 dark:text-slate-300 focus:outline-none">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
       </button>
     </div>
@@ -58,14 +66,18 @@ const navItems = [
   // Logika dibungkus dalam astro:page-load agar kompatibel dengan ViewTransitions
   document.addEventListener('astro:page-load', () => {
     
-    // --- Logika Mobile Menu ---
+    // ==========================================
+    // 1. LOGIKA MOBILE MENU
+    // ==========================================
     const btn = document.getElementById('mobile-menu-toggle');
     const menu = document.getElementById('mobile-menu');
     btn?.addEventListener('click', () => {
       menu?.classList.toggle('hidden');
     });
 
-    // --- Logika Dark Mode ---
+    // ==========================================
+    // 2. LOGIKA DARK MODE
+    // ==========================================
     const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
     const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
     const themeToggleBtn = document.getElementById('theme-toggle');
@@ -93,5 +105,29 @@ const navItems = [
 
     themeToggleBtn?.addEventListener('click', toggleTheme);
     mobileThemeToggleBtn?.addEventListener('click', toggleTheme);
+
+    // ==========================================
+    // 3. LOGIKA SMART HEADER (Hide on Scroll)
+    // ==========================================
+    const header = document.getElementById('main-header');
+    
+    if (header) {
+      let lastScrollY = window.scrollY;
+
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        
+        // Jika scroll ke bawah dan sudah melewati jarak 50px
+        if (currentScrollY > lastScrollY && currentScrollY > 50) {
+          header.classList.add('-translate-y-full');
+        } else {
+          // Jika scroll ke atas
+          header.classList.remove('-translate-y-full');
+        }
+        
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+    }
+
   });
 </script>

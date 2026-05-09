@@ -25,16 +25,18 @@ const vlogCollection = defineCollection({
 
 const projectCollection = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/proyek' }),
+  // 1. Tambahkan ({ image }) di sini
   schema: ({ image }) => z.object({
     title: z.string(),
-    description: z.string(), // Deskripsi singkat untuk kartu di halaman depan
-    client: z.string().optional(), // Nama klien atau institusi
-    role: z.string(), // Peran Anda (misal: "Fullstack Developer")
-    techStack: z.array(z.string()), // Array teknologi yang digunakan
+    description: z.string(),
+    client: z.string().optional(),
+    role: z.string(),
+    techStack: z.array(z.string()),
     publishDate: z.date(),
-    coverImage: image().optional(),
-    liveUrl: z.url().optional(), // Link ke web asli jika masih aktif
-    githubUrl: z.url().optional(),
+    // 2. Ubah coverImage menggunakan image()
+    coverImage: image().optional(), 
+    liveUrl: z.string().url().optional(),
+    githubUrl: z.string().url().optional(),
   }),
 });
 

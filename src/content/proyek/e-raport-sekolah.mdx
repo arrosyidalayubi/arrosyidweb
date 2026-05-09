@@ -1,14 +1,20 @@
 ---
 title: "Sistem e-Raport Sekolah & Landing Page"
-description: "Pengembangan sistem informasi manajemen nilai sekolah lengkap dengan landing page institusi untuk memudahkan administrasi akademik."
+description: "Pengembangan sistem informasi manajemen nilai sekolah..."
 client: "Sekolah Swasta Jakarta"
 role: "Fullstack Developer"
 techStack: ["PHP 8", "MySQL", "Tailwind CSS", "Astro"]
 publishDate: 2026-05-01
-liveUrl: https://raport.aliflammim.sch.id
-githubUrl: https://github.com/arrosyidalayubi/e-raport-aliflammim
+coverImage: "../../assets/images/Portfolio-Hiqmauinjakarta.avif"
 ---
+
+{/* 1. Import komponen galeri */}
 import MosaicGallery from '../../components/media/MosaicGallery.astro';
+
+{/* 2. Import file gambar-gambarnya (pastikan path-nya mengarah ke folder assets) */}
+import imgRaport1 from '../../assets/images/Portfolio-Hiqmauinjakarta.avif';
+import imgRaport2 from '../../assets/images/Portfolio-kargobekasi.avif';
+import imgRaport3 from '../../assets/images/Portfolio-kargopekanbaru.avif';
 
 ## Latar Belakang Masalah
 Klien membutuhkan sistem yang dapat menjembatani informasi nilai antara guru, siswa, dan orang tua secara *real-time*, sekaligus memiliki wajah web profil sekolah yang modern.
@@ -16,7 +22,10 @@ Klien membutuhkan sistem yang dapat menjembatani informasi nilai antara guru, si
 ## Solusi Teknis
 Saya merancang basis data relasional menggunakan MySQL dan membangun logika *backend* menggunakan PHP 8 dengan pendekatan PDO untuk keamanan maksimal.
 
-<MosaicGallery images={["/assets/images/Portfolio-kargopekanbaru.avif", "/assets/images/Portfolio-Hiqmauinjakarta.avif", "/assets/images/Portfolio-kargobekasi.avif"]} />
+{/* 3. Masukkan variabel gambar ke dalam array (TANPA TANDA KUTIP) */}
+<MosaicGallery images={[imgRaport1, imgRaport2, imgRaport3]} />
 
 ## Hasil & Optimalisasi
 Sistem ini berhasil memangkas waktu rekapitulasi nilai guru hingga 60% dan web profil sekolah kini memiliki skor performa Lighthouse 100/100 berkat Astro.
+
+![Contoh gambar inline](../../assets/images/Portfolio-Hiqmauinjakarta.avif)

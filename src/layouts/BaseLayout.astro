@@ -1,23 +1,47 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import '../assets/styles/global.css';
-import Header from '../components/shared/Header.astro'; // Kita akan buat ini
+import Header from '../components/shared/Header.astro';
+import Footer from '../components/shared/Footer.astro';
 
 interface Props {
   title: string;
   description: string;
+  image?: string; 
 }
 
-const { title, description } = Astro.props;
+const { title, description, image = '/default-og.webp' } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="id">
+<html lang="id" class="scroll-smooth scroll-pt-24">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Dasar -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
     <meta name="description" content={description} />
-    <title>{title} | Arrosyid Al Ayubi</title>
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.url)} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
     <ClientRouter />
 
     <!-- Script Inline untuk Dark Mode Init & View Transitions -->
@@ -52,9 +76,33 @@ const { title, description } = Astro.props;
   
   <!-- Tambahkan dark:bg-slate-900 dan dark:text-slate-100 -->
   <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-blue-200 dark:selection:bg-blue-900 transition-colors duration-300">
+    <!-- 1. SKIP TO CONTENT LINK (Tersembunyi, hanya muncul jika di-Tab) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-100 px-4 py-2 bg-blue-600 text-white font-bold rounded-lg shadow-lg">
+      Lanjut ke konten utama
+    </a>
     <Header />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
+
+    <script>
+      import mediumZoom from 'medium-zoom';
+
+      document.addEventListener('astro:page-load', () => {
+        // Targetkan semua gambar di dalam tulisan MDX (.prose img) 
+        // dan gambar di dalam Mosaic Gallery (.zoom-img)
+        const images = document.querySelectorAll('.prose img, .zoom-img');
+        
+        if (images.length > 0) {
+          mediumZoom(images, {
+            margin: 24, // Jarak gambar dari tepi layar saat di-zoom
+            background: 'rgba(0, 0, 0, 0.9)', // Warna latar belakang gelap semi-transparan yang elegan
+          });
+        }
+      });
+    </script>
+
+  <Footer />
+
   </body>
 </html>
