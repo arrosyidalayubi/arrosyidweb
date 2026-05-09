@@ -1,0 +1,29 @@
+---
+// src/components/blog/ShareButtons.astro
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+---
+
+<div class="mt-8">
+  <h4 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-4">Bagikan Artikel</h4>
+  <div class="flex flex-wrap gap-3">
+    <!-- WhatsApp -->
+    <a href={`https://api.whatsapp.com/send?text=${encodedTitle}%0A${encodedUrl}`} target="_blank" rel="noopener noreferrer" class="p-2.5 bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors" aria-label="Share to WhatsApp">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.123-.332-.148-1.033-.38-2.185-1.424-1.127-1.023-1.89-2.287-2.114-2.673-.223-.386-.024-.595.168-.787.172-.172.38-.445.57-.667.19-.222.253-.381.38-.636.127-.254.064-.476-.032-.667-.095-.19-.838-2.022-1.147-2.766-.3-.728-.606-.628-.838-.639-.215-.01-.46-.01-.706-.01-.246 0-.646.092-.984.46-.338.368-1.284 1.254-1.284 3.057 0 1.803 1.315 3.543 1.504 3.796.19.254 2.583 3.945 6.262 5.534.876.377 1.56.602 2.093.77.88.278 1.681.238 2.316.144.712-.106 2.185-.893 2.493-1.756.308-.863.308-1.603.215-1.756-.092-.153-.338-.248-.718-.438z"/></svg>
+    </a>
+    <!-- Twitter / X -->
+    <a href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`} target="_blank" rel="noopener noreferrer" class="p-2.5 bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" aria-label="Share to Twitter">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <!-- LinkedIn -->
+    <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`} target="_blank" rel="noopener noreferrer" class="p-2.5 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors" aria-label="Share to LinkedIn">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    </a>
+  </div>
+</div>

@@ -3,10 +3,12 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Comment from '../../components/shared/Comment.astro';
+// 1. Import komponen MosaicGallery yang sudah kita buat
+import MosaicGallery from '../../components/media/MosaicGallery.astro';
 
 export async function getStaticPaths() {
-  const vlogEntries = await getCollection('vlog');
-  return vlogEntries.map(entry => ({
+  const vlogs = await getCollection('vlog');
+  return vlogs.map(entry => ({
     params: { slug: entry.id },
     props: { entry },
   }));
@@ -14,45 +16,41 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+
+// 2. Ekstrak data gallery dari frontmatter
 const { title, location, publishDate, gallery } = entry.data;
 ---
 
 <BaseLayout title={title} description={`Vlog perjalanan di ${location}`}>
   <article class="max-w-5xl mx-auto px-4 py-16 md:py-24">
     
+    <!-- Header Vlog -->
     <header class="text-center mb-12 max-w-3xl mx-auto">
-      <div class="flex items-center justify-center gap-2 mb-4 text-blue-600 dark:text-blue-400 font-semibold uppercase tracking-widest text-sm">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-        <span>{location}</span>
+      <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">{title}</h1>
+      <div class="flex items-center justify-center gap-4 text-slate-600 dark:text-slate-400 font-medium">
+        <span class="flex items-center gap-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          {location}
+        </span>
+        <span>•</span>
+        <time>{new Date(publishDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
       </div>
-      <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white mb-6">{title}</h1>
-      <time class="text-slate-500 dark:text-slate-400">
-        {new Date(publishDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
-      </time>
     </header>
 
-    <!-- Mosaic Gallery -->
+    <!-- 3. Render otomatis MosaicGallery jika ada gambar di frontmatter -->
     {gallery && gallery.length > 0 && (
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-16 breakout px-4 md:px-0">
-        {gallery.map((imgUrl, index) => (
-          <div class={`overflow-hidden rounded-2xl bg-slate-200 dark:bg-slate-800 ${index === 0 || index === 3 ? 'col-span-2 row-span-2 h-64 md:h-96' : 'col-span-1 h-32 md:h-48'}`}>
-            <img 
-              src={imgUrl} 
-              alt={`Galeri ${index + 1}`} 
-              class="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-              loading={index < 2 ? "eager" : "lazy"} 
-            />
-          </div>
-        ))}
+      <div class="mb-12">
+        <MosaicGallery images={gallery} />
       </div>
     )}
 
-    <!-- Teks Cerita Vlog -->
-    <div class="prose prose-lg prose-slate dark:prose-invert mx-auto">
+    <!-- Konten Teks MDX -->
+    <div class="prose prose-lg prose-slate dark:prose-invert mx-auto prose-img:rounded-2xl">
       <Content />
     </div>
 
-    <div class="max-w-3xl mx-auto mt-8">
+    <!-- Komentar -->
+    <div class="max-w-3xl mx-auto mt-16">
       <Comment />
     </div>
 

@@ -1,0 +1,57 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('proyek');
+  return projects.map(entry => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, description, client, role, techStack, liveUrl, githubUrl } = entry.data;
+---
+
+<BaseLayout title={`Proyek: ${title}`} description={description}>
+  <article class="max-w-4xl mx-auto px-4 py-16 md:py-24">
+    
+    <header class="mb-16 border-b border-slate-200 dark:border-slate-800 pb-12">
+      <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white mb-6">{title}</h1>
+      
+      <div class="grid sm:grid-cols-3 gap-8 text-sm">
+        <div>
+          <span class="block text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider mb-2">Klien / Proyek</span>
+          <span class="font-medium text-slate-900 dark:text-slate-200">{client || 'Proyek Personal'}</span>
+        </div>
+        <div>
+          <span class="block text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider mb-2">Peran</span>
+          <span class="font-medium text-slate-900 dark:text-slate-200">{role}</span>
+        </div>
+        <div>
+          <span class="block text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider mb-2">Tech Stack</span>
+          <div class="flex flex-wrap gap-2">
+            {techStack.map(tech => (
+              <span class="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-bold rounded-md">{tech}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Tombol Eksternal (Opsional) -->
+      {(liveUrl || githubUrl) && (
+        <div class="mt-8 flex gap-4">
+          {liveUrl && <a href={liveUrl} target="_blank" class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">Kunjungi Website</a>}
+          {githubUrl && <a href={githubUrl} target="_blank" class="px-6 py-2.5 bg-slate-900 dark:bg-slate-800 text-white font-medium rounded-lg hover:bg-slate-800 dark:hover:bg-slate-700 transition-colors">Lihat Source Code</a>}
+        </div>
+      )}
+    </header>
+
+    <div class="prose prose-lg prose-slate dark:prose-invert mx-auto prose-img:rounded-2xl">
+      <Content />
+    </div>
+
+  </article>
+</BaseLayout>

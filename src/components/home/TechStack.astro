@@ -1,0 +1,16 @@
+<section class="mb-24">
+      <h2 class="text-2xl font-bold dark:text-white text-slate-900 mb-8 border-b border-slate-200 pb-4">Tech Stack & Keahlian</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { category: 'Frontend', tech: 'Astro, React, Next.js, Tailwind CSS' },
+          { category: 'Backend & DB', tech: 'PHP 8, MySQL, MariaDB, MongoDB' },
+          { category: 'Mobile', tech: 'Kotlin, Android Studio' },
+          { category: 'Infrastruktur', tech: 'Nginx, Cloudflare Tunnels, Cisco' }
+        ].map((item) => (
+          <div class="p-5 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+            <h3 class="text-sm font-semibold text-blue-600 mb-2 uppercase tracking-wider">{item.category}</h3>
+            <p class="text-slate-700 dark:text-white font-medium">{item.tech}</p>
+          </div>
+        ))}
+      </div>
+</section>

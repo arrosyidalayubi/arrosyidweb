@@ -1,0 +1,27 @@
+---
+// src/components/home/FeaturedProjects.astro
+import { getCollection } from 'astro:content';
+const allProjects = await getCollection('proyek');
+const featuredProjects = allProjects
+  .sort((a, b) => new Date(b.data.publishDate).valueOf() - new Date(a.data.publishDate).valueOf())
+  .slice(0, 4);
+---
+
+<section id="proyek" class="mb-24">
+  <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-8 border-b border-slate-200 dark:border-slate-800 pb-4">Proyek Pilihan</h2>
+  
+  <div class="grid md:grid-cols-2 gap-8">
+    {featuredProjects.map(project => (
+      <div class="group bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-2xl transition-all duration-300">
+        <!-- ... (Paste sisa HTML kartu proyek dari kode sebelumnya di sini) ... -->
+        <div class="p-8">
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3">{project.data.title}</h3>
+          <p class="text-slate-600 dark:text-slate-400 mb-6 line-clamp-3">{project.data.description}</p>
+          <a href={`/proyek/${project.id}`} class="inline-flex items-center text-blue-600 dark:text-blue-400 font-semibold group-hover:text-blue-700 dark:group-hover:text-blue-300">
+            Lihat Studi Kasus <span class="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+          </a>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const { Content, headings } = await render(entry);
 
 // --- Logika Related Posts ---
 const allBlogs = await getCollection('blog');
@@ -32,7 +32,7 @@ const relatedPosts = allBlogs
   .slice(0, 2); // Ambil 2 teratas
 ---
 
-<BlogPostLayout frontmatter={entry.data}>
+<BlogPostLayout frontmatter={entry.data} headings={headings}>
   <Content />
 
   <!-- Bagian Artikel Terkait -->

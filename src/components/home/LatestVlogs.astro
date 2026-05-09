@@ -1,0 +1,57 @@
+---
+// src/components/home/LatestVlogs.astro
+import { getCollection } from 'astro:content';
+// 1. Wajib import komponen Image
+import { Image } from 'astro:assets';
+
+const allVlogs = await getCollection('vlog');
+// Ambil 3 vlog paling baru
+const latestVlogs = allVlogs
+  .sort((a, b) => new Date(b.data.publishDate).valueOf() - new Date(a.data.publishDate).valueOf())
+  .slice(0, 3); 
+---
+
+<section id="vlog-terbaru" class="mb-24">
+  <div class="flex items-center justify-between mb-8 border-b border-slate-200 dark:border-slate-800 pb-4">
+    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Vlog & Galeri Terbaru</h2>
+    <a href="/vlog" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Lihat Semua →</a>
+  </div>
+  
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+    {latestVlogs.map((vlog) => (
+      <a href={`/vlog/${vlog.id}`} class="group relative block h-72 rounded-3xl overflow-hidden bg-slate-200 dark:bg-slate-800 shadow-sm hover:shadow-2xl transition-all duration-300">
+        
+        <!-- 2. Gunakan tag Image untuk merender gambar index [0] -->
+        {vlog.data.gallery && vlog.data.gallery.length > 0 ? (
+          <Image 
+            src={vlog.data.gallery[0]} 
+            alt={vlog.data.title} 
+            class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out" 
+            width={600}
+            height={400}
+          />
+        ) : (
+          <div class="absolute inset-0 flex items-center justify-center text-slate-400 dark:text-slate-500 font-medium">
+            Tanpa Gambar
+          </div>
+        )}
+
+        <!-- Overlay Gradient Gelap -->
+        <div class="absolute inset-0 bg-linear-to-t from-slate-900/95 via-slate-900/40 to-transparent"></div>
+
+        <!-- Teks di Atas Gambar -->
+        <div class="absolute bottom-0 left-0 p-6 w-full text-white transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="px-2.5 py-1 bg-blue-600/80 backdrop-blur-md text-[10px] font-bold rounded uppercase tracking-wider">
+              {vlog.data.location}
+            </span>
+          </div>
+          <h3 class="text-xl font-bold mb-1 group-hover:text-blue-300 transition-colors line-clamp-2 leading-snug">
+            {vlog.data.title}
+          </h3>
+        </div>
+
+      </a>
+    ))}
+  </div>
+</section>
