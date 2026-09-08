@@ -67,28 +67,47 @@ const navItems = [
 </header>
 
 <script>
-  // PERBAIKAN 2: Memindahkan variabel ke Scope Module (luar listener) 
-  // Ini menyelesaikan masalah 'Property does not exist on window' dan mencegah memory leak di Astro.
   let lastScrollY = window.scrollY;
   let activeScrollHandler: ((e: Event) => void) | null = null;
+  // Tambahkan variabel ini di luar
+  let clickOutsideHandler: ((e: Event) => void) | null = null;
 
   document.addEventListener('astro:page-load', () => {
     
     // ==========================================
-    // 1. LOGIKA MOBILE MENU (Transisi Mulus)
+    // 1. LOGIKA MOBILE MENU
     // ==========================================
     const btn = document.getElementById('mobile-menu-toggle');
     const menu = document.getElementById('mobile-menu');
     
     if (btn && menu) {
       btn.onclick = () => {
-        // Toggle 3 class ini akan menciptakan efek menu meluncur (slide-down) dan memudar (fade-in)
         menu.classList.toggle('opacity-0');
         menu.classList.toggle('pointer-events-none');
         menu.classList.toggle('-translate-y-2');
       };
     }
 
+    // --- TAMBAHAN: Logika Klik di Luar Menu ---
+    // Bersihkan listener lama (jika ada)
+    if (clickOutsideHandler) {
+      document.removeEventListener('click', clickOutsideHandler);
+    }
+    
+    clickOutsideHandler = (event: Event) => {
+      const target = event.target as Node;
+      
+      // Jika menu sedang terbuka (tidak ada opacity-0)
+      if (menu && btn && !menu.classList.contains('opacity-0')) {
+        // Jika klik BUKAN pada menu dan BUKAN pada tombol
+        if (!menu.contains(target) && !btn.contains(target)) {
+          menu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+        }
+      }
+    };
+
+    // Pasang pendeteksi klik ke seluruh halaman
+    document.addEventListener('click', clickOutsideHandler);
     // ==========================================
     // 2. LOGIKA DARK MODE
     // ==========================================
